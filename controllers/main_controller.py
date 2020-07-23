@@ -60,10 +60,10 @@ class MainController:
             password_hash = md5(password.encode()).hexdigest()
 
             db_session = DatabaseSession()
-            users = db_session.query(User).filter_by(username=username, password=password_hash)
+            found_users = db_session.query(User).filter_by(username=username, password=password_hash)
 
-            if users.count() == 1:
-                session_token = SessionManager.new_session(users[0].id)
+            if found_users.count() == 1:
+                session_token = SessionManager.new_session(found_users[0].id)
                 result['data'] = session_token
 
             else:
