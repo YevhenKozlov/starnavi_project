@@ -4,6 +4,7 @@ import os
 import sys
 
 from flask import Flask
+from flask_jwt_extended import JWTManager
 
 # Set start dirs
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -16,6 +17,7 @@ from controllers import MainController
 # Initialization
 Initialization.start_initialization()
 app = Flask(__name__)
+jwt = JWTManager(app)
 
 # Routes mapping
 app.add_url_rule('/api/registration/', 'registration', MainController.registration, methods=['POST'])

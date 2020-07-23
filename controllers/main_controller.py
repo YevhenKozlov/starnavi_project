@@ -1,5 +1,6 @@
 import json
 
+from hashlib import md5
 from flask import request
 from sqlalchemy.orm import sessionmaker
 
@@ -54,9 +55,13 @@ class MainController:
 
         try:
             username = json.loads(request.form['username'])
-            password = json.loads(request.form['password'])
+            password = md5(json.loads(request.form['password']).encode()).hexdigest()
 
-            # TODO: create JWT-token
+            user = db_session.query(User).filter_by(username=username).one()
+            if user.password != password:
+                raise Exception('wrong password')
+
+            result['data'] = user.get_token()
 
         except Exception as e:
             result['success'] = False

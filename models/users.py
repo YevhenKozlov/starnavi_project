@@ -1,8 +1,10 @@
 from time import mktime
 from hashlib import md5
+from datetime import timedelta
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from flask_jwt_extended import create_access_token
 
 Base = declarative_base()
 
@@ -53,3 +55,16 @@ class User(Base):
                 max_timestamp = timestamp
 
         return max_timestamp
+
+    def get_token(self, expire_time: int = 24):
+        """
+        Getting JWT token
+
+        :param expire_time: int, token expire time (default = 24 hours)
+        :return: str, token
+        """
+
+        expire_delta = timedelta(expire_time)
+        token = create_access_token(identity=self.id, expires_delta=expire_delta)
+
+        return token
