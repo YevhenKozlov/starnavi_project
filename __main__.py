@@ -19,6 +19,7 @@ app = Flask(__name__)
 
 # Routes mapping
 app.add_url_rule('/api/registration/', 'registration', MainController.registration, methods=['POST'])
+app.add_url_rule('/api/login/', 'login', MainController.login, methods=['POST'])
 
 
 if __name__ == '__main__':
