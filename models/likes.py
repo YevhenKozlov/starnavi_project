@@ -12,8 +12,8 @@ class Like(Base):
     __tablename__ = 'likes'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    post_id = Column(Integer, ForeignKey('posts.id'))
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
     type = Column(Boolean, nullable=False)  # 0 - dislike, 1 - like
     timestamp = Column(DateTime(timezone=True), default=datetime.utcnow(), nullable=False)
 
