@@ -90,20 +90,3 @@ class DatabaseConfig(Config):
 
     path = 'configs/main.ini'
     section = 'DATABASE'
-
-
-class RedisConfig(Config):
-    """
-    Class 'RedisConfig'
-
-    Options:
-        self.db - str, number of Redis database
-        self.password - str, password for database
-        self.host - str, example 'localhost' or '0.0.0.0', etc...
-        self.port - str, port {80 ... 65536}
-
-    Hints in PyCharm not worked
-    """
-
-    path = 'configs/main.ini'
-    section = 'REDIS'

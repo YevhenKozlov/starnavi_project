@@ -14,7 +14,7 @@ class Like(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
-    type = Column(Boolean, nullable=False)  # 0 - dislike, 1 - like
+    type = Column(Boolean, nullable=False)
     timestamp = Column(DateTime(timezone=True), default=datetime.utcnow(), nullable=False)
 
     def __init__(self, user_id: int, post_id: int, type_: bool):

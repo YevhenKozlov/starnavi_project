@@ -1,10 +1,8 @@
 import json
 
-from hashlib import md5
 from flask import request
 from sqlalchemy.orm import sessionmaker
 
-from core import SessionManager
 from json_objects import response_object
 from connections import DatabaseConnect
 from models import *
@@ -57,17 +55,8 @@ class MainController:
         try:
             username = json.loads(request.form['username'])
             password = json.loads(request.form['password'])
-            password_hash = md5(password.encode()).hexdigest()
 
-            db_session = DatabaseSession()
-            found_users = db_session.query(User).filter_by(username=username, password=password_hash)
-
-            if found_users.count() == 1:
-                session_token = SessionManager.new_session(found_users[0].id)
-                result['data'] = session_token
-
-            else:
-                raise Exception('user not found')
+            # TODO: create JWT-token
 
         except Exception as e:
             result['success'] = False
