@@ -18,11 +18,24 @@ class MainController:
     """
 
     @staticmethod
-    def test():
+    def registration():
         """
-        TEST
+        User registration
         """
 
-        SessionManager.new_session(123)
+        result = response_object.copy()
 
-        return json.dumps({'123': '123'})
+        try:
+            username = json.loads(request.form['username'])
+            password = json.loads(request.form['password'])
+
+            db_session = DatabaseSession()
+            new_user = User(username, password)
+            db_session.add(new_user)
+            db_session.commit()
+
+        except Exception as e:
+            result['success'] = False
+            result['message'] = str(e)
+
+        return json.dumps(result, ensure_ascii=False)

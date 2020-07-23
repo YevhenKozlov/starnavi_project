@@ -18,7 +18,7 @@ Initialization.start_initialization()
 app = Flask(__name__)
 
 # Routes mapping
-app.add_url_rule('/test/', 'test', MainController.test, methods=['GET'])
+app.add_url_rule('/api/registration/', 'registration', MainController.registration, methods=['POST'])
 
 
 if __name__ == '__main__':
