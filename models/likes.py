@@ -15,17 +15,19 @@ class Like(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
     type = Column(Boolean, nullable=False)
-    timestamp = Column(DateTime(timezone=True), default=datetime.utcnow(), nullable=False)
+    timestamp = Column(DateTime(timezone=True), nullable=False)
 
-    def __init__(self, user_id: int, post_id: int, type_: bool):
+    def __init__(self, user_id: int, post_id: int, type_: bool, timestamp: datetime = datetime.utcnow()):
         """
         Constructor for create new item in this table
 
         :param user_id: int, user identity
         :param post_id: int, post identity
         :param type_: bool, type of mark (0 - dislike, 1 - like)
+        :param timestamp: datetime, time of create new like (default = now)
         """
 
         self.user_id = user_id
         self.post_id = post_id
         self.type = type_
+        self.timestamp = timestamp
