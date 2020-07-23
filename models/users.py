@@ -1,3 +1,4 @@
+from time import mktime
 from hashlib import md5
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -31,3 +32,24 @@ class User(Base):
 
         self.username = username
         self.password = md5(password.encode()).hexdigest()
+
+    def get_last_action_time(self) -> float:
+        """
+        Method for getting last action time
+
+        :return: float, timestamp (return 0 if action not found else UNIX-time)
+        """
+
+        max_timestamp = 0
+
+        for post in self.posts:
+            timestamp = mktime(post.timestamp.timetuple())
+            if timestamp > max_timestamp:
+                max_timestamp = timestamp
+
+        for like in self.likes:
+            timestamp = mktime(like.timestamp.timetuple())
+            if timestamp > max_timestamp:
+                max_timestamp = timestamp
+
+        return max_timestamp
