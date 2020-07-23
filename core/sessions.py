@@ -68,3 +68,20 @@ class SessionManager:
 
         redis = RedisConnect()
         return redis.connection.exists(f'session_{user_id}')
+
+    @staticmethod
+    def get_user_id(token: str) -> int or None:
+        """
+        Getting user identity
+
+        :param token: str, unique session-token
+        :return: int, user identity or None if not found
+        """
+
+        redis = RedisConnect()
+
+        for session_name in redis.connection.keys():
+            if token == redis.connection.get(session_name).decode():
+                return int(session_name.decode().split('_')[-1])
+
+        return None
