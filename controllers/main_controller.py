@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from hashlib import md5
 from flask import request
+from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -220,27 +221,37 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
-            # TODO: Need write this method
-            # query = db_session.query(Post, Like)\
-            #     .filter(Post.id == Like.post_id)\
-            #     .filter(Like.timestamp >= date_from)\
-            #     .filter(Like.timestamp <= date_to)\
-            #     .all()
-            #
-            # result_posts_list = list()
-            # for post in query:
-            #     package = {
-            #         'id': post.id,
-            #         'number_of_likes': len(),
-            #         'number_of_unlikes': len()
-            #     }
-            #     result_posts_list.append(package)
-            #
-            # result['data'] = {
-            #     'posts': result_posts_list
-            # }
+            analytics_data = dict()
 
-            pass
+            # 0 - unlikes, 1 - likes
+            for like_type in ['0', '1']:
+                query_result = db_session.query(Post, func.count(Like.id))\
+                    .join(Like, Post.id == Like.post_id)\
+                    .filter(Like.timestamp >= date_from)\
+                    .filter(Like.timestamp <= date_to)\
+                    .filter(Like.type == like_type)\
+                    .group_by(Post.id)\
+                    .all()
+
+                for item in query_result:
+
+                    package = {
+                        'number_of_likes': 0,
+                        'number_of_unlikes': 0
+                    }
+
+                    key = 'number_of_likes' if like_type == '1' else 'number_of_unlikes'
+
+                    if item[0].id not in analytics_data.keys():
+                        package[key] = item[1]
+                        analytics_data[item[0].id] = package
+
+                    else:
+                        analytics_data[item[0].id][key] = item[1]
+
+            result['data'] = {
+                'posts': analytics_data
+            }
 
         except Exception as e:
             result['success'] = False
