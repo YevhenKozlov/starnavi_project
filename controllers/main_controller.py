@@ -47,7 +47,7 @@ class MainController:
     def login():
         """
         User login in system
-        Return token
+        Return access token
         """
 
         result = response_object.copy()
