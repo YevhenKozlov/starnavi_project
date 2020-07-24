@@ -11,7 +11,7 @@ class Initialization:
     @staticmethod
     def database_initialization():
         """
-        Main initialization method
+        Database initialization method
         """
 
         # Initialization tables in database
