@@ -9,7 +9,7 @@ class Initialization:
     """
 
     @staticmethod
-    def start_initialization():
+    def database_initialization():
         """
         Main initialization method
         """

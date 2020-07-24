@@ -15,15 +15,16 @@ from core import MainConfig, Initialization
 from controllers import MainController
 
 # Initialization
-Initialization.start_initialization()
+config = MainConfig()
+Initialization.database_initialization()
 app = Flask(__name__)
+app.secret_key = config.secret_key.encode()
 jwt = JWTManager(app)
 
-# Routes mapping
+# Rules mapping
 app.add_url_rule('/api/registration/', 'registration', MainController.registration, methods=['POST'])
 app.add_url_rule('/api/login/', 'login', MainController.login, methods=['POST'])
 
 
 if __name__ == '__main__':
-    config = MainConfig()
     app.run(host=config.server_host, port=int(config.server_port))

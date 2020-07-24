@@ -27,8 +27,8 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
-            username = json.loads(request.form['username'])
-            password = json.loads(request.form['password'])
+            username = request.form['username']
+            password = request.form['password']
 
             new_user = User(username, password)
             db_session.add(new_user)
@@ -54,14 +54,14 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
-            username = json.loads(request.form['username'])
-            password = md5(json.loads(request.form['password']).encode()).hexdigest()
+            username = request.form['username']
+            password = md5(request.form['password'].encode()).hexdigest()
 
             user = db_session.query(User).filter_by(username=username).one()
             if user.password != password:
                 raise Exception('wrong password')
 
-            result['data'] = user.get_token()
+            result['data'] = {'access_token': user.get_token()}
 
         except Exception as e:
             result['success'] = False

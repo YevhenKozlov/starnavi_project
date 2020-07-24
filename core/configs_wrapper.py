@@ -66,6 +66,7 @@ class MainConfig(Config):
     Options:
         self.server_host - str, example 'localhost' or '0.0.0.0', etc...
         self.server_port - str, port {80 ... 65536}
+        self.secret_key - str, Flask secret key
 
     Hints in PyCharm not worked
     """
