@@ -24,6 +24,12 @@ jwt = JWTManager(app)
 # Rules mapping
 app.add_url_rule('/api/registration/', 'registration', MainController.registration, methods=['POST'])
 app.add_url_rule('/api/login/', 'login', MainController.login, methods=['POST'])
+app.add_url_rule('/api/create_post/', 'create_post', MainController.create_post, methods=['POST'])
+app.add_url_rule('/api/like_post/', 'like_post', MainController.like_post, methods=['POST'])
+app.add_url_rule('/api/unlike_post/', 'unlike_post', MainController.unlike_post, methods=['POST'])
+app.add_url_rule('/api/user_activity/<int:user_id>', 'user_activity', MainController.user_activity, methods=['GET'])
+app.add_url_rule('/api/analytics/from/<str:date_from>/to/<str:date_to>', 'analytics', MainController.analytics,
+                 methods=['GET'])
 
 
 if __name__ == '__main__':
