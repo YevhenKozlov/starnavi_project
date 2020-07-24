@@ -1,6 +1,6 @@
 from time import mktime
 from hashlib import md5
-from datetime import timedelta
+from datetime import timedelta, datetime
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -35,11 +35,11 @@ class User(Base):
         self.username = username
         self.password = md5(password.encode()).hexdigest()
 
-    def get_last_action_time(self) -> float:
+    def get_last_action_time(self) -> datetime:
         """
         Method for getting last action time
 
-        :return: float, timestamp (return 0 if action not found else UNIX-time)
+        :return: datetime, timestamp (return 1970... if action not found)
         """
 
         max_timestamp = 0
@@ -54,7 +54,7 @@ class User(Base):
             if timestamp > max_timestamp:
                 max_timestamp = timestamp
 
-        return max_timestamp
+        return datetime.fromtimestamp(max_timestamp)
 
     def get_token(self, expire_time: int = 24) -> str:
         """
