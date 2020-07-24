@@ -56,7 +56,7 @@ class User(Base):
 
         return max_timestamp
 
-    def get_token(self, expire_time: int = 24):
+    def get_token(self, expire_time: int = 24) -> str:
         """
         Getting JWT token
 
