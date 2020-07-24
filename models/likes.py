@@ -15,9 +15,9 @@ class Like(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
     type = Column(Boolean, nullable=False)
-    timestamp = Column(DateTime(timezone=True), nullable=False)
+    timestamp = Column(DateTime, nullable=False)
 
-    def __init__(self, user_id: int, post_id: int, type_: bool, timestamp: datetime = datetime.utcnow()):
+    def __init__(self, user_id: int, post_id: int, type_: bool, timestamp: datetime = datetime.now()):
         """
         Constructor for create new item in this table
 

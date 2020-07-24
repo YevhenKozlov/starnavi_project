@@ -19,7 +19,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False, unique=True)
     password = Column(String, nullable=False)
-    last_login_time = Column(DateTime(timezone=True))
+    last_login_time = Column(DateTime)
 
     posts = relationship('Post')
     likes = relationship('Like')
