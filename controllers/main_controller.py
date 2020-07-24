@@ -1,4 +1,5 @@
 import json
+import time
 
 from datetime import datetime
 from hashlib import md5
@@ -67,6 +68,10 @@ class MainController:
                 'access_token': user.get_token()
             }
 
+            user.last_login_time = datetime.fromtimestamp(time.time())
+            db_session.add(user)
+            db_session.commit()
+
         except Exception as e:
             result['success'] = False
             result['message'] = str(e)
@@ -74,7 +79,7 @@ class MainController:
         finally:
             db_session.close()
 
-        return json.dumps(result, ensure_ascii=False)
+        return json.dumps(result, ensure_ascii=False), 200 if result['success'] else 401
 
     @staticmethod
     @jwt_required
@@ -89,11 +94,12 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
+            print(request.form)
             new_post = Post(
                 title=request.form['title'],
                 text=request.form['text'],
                 user_id=user_id,
-                timestamp=datetime.fromtimestamp(request.form['timestamp'])
+                timestamp=datetime.fromtimestamp(int(request.form['timestamp']))
             )
 
             db_session.add(new_post)
@@ -124,7 +130,7 @@ class MainController:
             new_like = Like(
                 user_id=user_id,
                 post_id=request.form['post_id'],
-                timestamp=datetime.fromtimestamp(request.form['timestamp']),
+                timestamp=datetime.fromtimestamp(int(request.form['timestamp'])),
                 type_=True
             )
 
@@ -154,9 +160,9 @@ class MainController:
 
         try:
             new_like = Like(
-                user_id=user_id,
+                user_id=int(user_id),
                 post_id=request.form['post_id'],
-                timestamp=datetime.fromtimestamp(request.form['timestamp']),
+                timestamp=datetime.fromtimestamp(int(request.form['timestamp'])),
                 type_=False
             )
 
