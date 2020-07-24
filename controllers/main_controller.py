@@ -1,9 +1,10 @@
 import json
 
+from datetime import datetime
 from hashlib import md5
 from flask import request
-from datetime import datetime
 from sqlalchemy.orm import sessionmaker
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from json_objects import response_object
 from connections import DatabaseConnect
@@ -76,34 +77,100 @@ class MainController:
         return json.dumps(result, ensure_ascii=False)
 
     @staticmethod
+    @jwt_required
     def create_post():
         """
         Creating new post
         """
 
-        # TODO: Need write this method
+        user_id = get_jwt_identity()
 
-        pass
+        result = response_object.copy()
+        db_session = DatabaseSession()
+
+        try:
+            new_post = Post(
+                title=request.form['title'],
+                text=request.form['text'],
+                user_id=user_id,
+                timestamp=datetime.fromtimestamp(request.form['timestamp'])
+            )
+
+            db_session.add(new_post)
+            db_session.commit()
+
+        except Exception as e:
+            result['success'] = False
+            result['message'] = str(e)
+
+        finally:
+            db_session.close()
+
+        return json.dumps(result, ensure_ascii=False)
 
     @staticmethod
+    @jwt_required
     def like_post():
         """
         Save like
         """
 
-        # TODO: Need write this method
+        user_id = get_jwt_identity()
 
-        pass
+        result = response_object.copy()
+        db_session = DatabaseSession()
+
+        try:
+            new_like = Like(
+                user_id=user_id,
+                post_id=request.form['post_id'],
+                timestamp=datetime.fromtimestamp(request.form['timestamp']),
+                type_=True
+            )
+
+            db_session.add(new_like)
+            db_session.commit()
+
+        except Exception as e:
+            result['success'] = False
+            result['message'] = str(e)
+
+        finally:
+            db_session.close()
+
+        return json.dumps(result, ensure_ascii=False)
 
     @staticmethod
+    @jwt_required
     def unlike_post():
         """
         Save unlike
         """
 
-        # TODO: Need write this method
+        user_id = get_jwt_identity()
 
-        pass
+        result = response_object.copy()
+        db_session = DatabaseSession()
+
+        try:
+            new_like = Like(
+                user_id=user_id,
+                post_id=request.form['post_id'],
+                timestamp=datetime.fromtimestamp(request.form['timestamp']),
+                type_=False
+            )
+
+            db_session.add(new_like)
+            db_session.commit()
+
+        except Exception as e:
+            result['success'] = False
+            result['message'] = str(e)
+
+        finally:
+            db_session.close()
+
+        return json.dumps(result, ensure_ascii=False)
 
     @staticmethod
     def user_activity(user_id: int):
@@ -147,10 +214,27 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
-            date_from = datetime.strptime(date_from, '%Y-%m-%d')
-            date_to = datetime.strptime(date_to, '%Y-%m-%d')
+            # TODO: Need write this method
+            # query = db_session.query(Post, Like)\
+            #     .filter(Post.id == Like.post_id)\
+            #     .filter(Like.timestamp >= date_from)\
+            #     .filter(Like.timestamp <= date_to)\
+            #     .all()
+            #
+            # result_posts_list = list()
+            # for post in query:
+            #     package = {
+            #         'id': post.id,
+            #         'number_of_likes': len(),
+            #         'number_of_unlikes': len()
+            #     }
+            #     result_posts_list.append(package)
+            #
+            # result['data'] = {
+            #     'posts': result_posts_list
+            # }
 
-            # TODO: query to DB
+            pass
 
         except Exception as e:
             result['success'] = False
