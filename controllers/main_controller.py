@@ -120,8 +120,8 @@ class MainController:
             last_login_time = user.last_login_time
             last_action_time = user.get_last_action_time()
 
-            response_last_login_time = str(last_login_time).split(' ')[0] if last_login_time else None
-            response_last_action_time = str(last_action_time).split(' ')[0] if last_action_time else None
+            response_last_login_time = str(last_login_time) if last_login_time else None
+            response_last_action_time = str(last_action_time) if last_action_time else None
 
             result['data'] = {
                 'last_login_time': response_last_login_time,
