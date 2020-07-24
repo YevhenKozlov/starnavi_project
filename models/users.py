@@ -35,11 +35,11 @@ class User(Base):
         self.username = username
         self.password = md5(password.encode()).hexdigest()
 
-    def get_last_action_time(self) -> datetime:
+    def get_last_action_time(self) -> datetime or None:
         """
         Method for getting last action time
 
-        :return: datetime, timestamp (return 1970... if action not found)
+        :return: datetime, timestamp (return None if action not found)
         """
 
         max_timestamp = 0
@@ -54,7 +54,7 @@ class User(Base):
             if timestamp > max_timestamp:
                 max_timestamp = timestamp
 
-        return datetime.fromtimestamp(max_timestamp)
+        return datetime.fromtimestamp(max_timestamp) if max_timestamp else None
 
     def get_token(self, expire_time: int = 24) -> str:
         """
