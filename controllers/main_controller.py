@@ -149,9 +149,9 @@ class MainController:
 
     @staticmethod
     @jwt_required
-    def unlike_post():
+    def dislike_post():
         """
-        Save unlike
+        Save dislike
         """
 
         user_id = get_jwt_identity()
@@ -160,14 +160,14 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
-            new_like = Like(
+            new_dislike = Like(
                 user_id=int(user_id),
                 post_id=request.form['post_id'],
                 timestamp=datetime.fromtimestamp(int(request.form['timestamp'])),
                 type_=False
             )
 
-            db_session.add(new_like)
+            db_session.add(new_dislike)
             db_session.commit()
 
         except Exception as e:
@@ -223,24 +223,23 @@ class MainController:
         try:
             analytics_data = dict()
 
-            # 0 - unlikes, 1 - likes
+            # 0 - dislikes, 1 - likes
             for like_type in ['0', '1']:
                 query_result = db_session.query(Post, func.count(Like.id))\
                     .join(Like, Post.id == Like.post_id)\
                     .filter(Like.timestamp >= date_from)\
                     .filter(Like.timestamp <= date_to)\
                     .filter(Like.type == like_type)\
-                    .group_by(Post.id)\
-                    .all()
+                    .group_by(Post.id).all()
 
                 for item in query_result:
 
                     package = {
                         'number_of_likes': 0,
-                        'number_of_unlikes': 0
+                        'number_of_dislikes': 0
                     }
 
-                    key = 'number_of_likes' if like_type == '1' else 'number_of_unlikes'
+                    key = 'number_of_likes' if like_type == '1' else 'number_of_dislikes'
 
                     if item[0].id not in analytics_data.keys():
                         package[key] = item[1]
