@@ -128,9 +128,14 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
+            post_id = request.form['post_id']
+
+            if db_session.query(Like).filter_by(user_id=int(user_id), post_id=post_id).count():
+                raise Exception('mark exists')
+
             new_like = Like(
-                user_id=user_id,
-                post_id=request.form['post_id'],
+                user_id=int(user_id),
+                post_id=int(post_id),
                 timestamp=datetime.fromtimestamp(int(request.form['timestamp'])),
                 type_=True
             )
@@ -160,9 +165,14 @@ class MainController:
         db_session = DatabaseSession()
 
         try:
+            post_id = request.form['post_id']
+
+            if db_session.query(Like).filter_by(user_id=int(user_id), post_id=post_id).count():
+                raise Exception('mark exists')
+
             new_dislike = Like(
                 user_id=int(user_id),
-                post_id=request.form['post_id'],
+                post_id=int(post_id),
                 timestamp=datetime.fromtimestamp(int(request.form['timestamp'])),
                 type_=False
             )
